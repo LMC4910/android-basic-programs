@@ -1,0 +1,20 @@
+package com.example.ep6;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class welcome extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_welcome);
+        Intent i=getIntent();
+        String s1 = i.getStringExtra("username");
+        TextView tv1 = (TextView) findViewById(R.id.x);
+        tv1.setText("login successfull welcome :" +s1);
+    }
+}
