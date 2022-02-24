@@ -741,3 +741,705 @@ public class Explicit12_final {
 	}
 	
 }
+
+
+
+10. BOUNDARY VALUE ANALYSIS (BVA) FOR NEXTDATE FUNCTION
+
+JAVA CODE
+
+import java.util.*;
+public class Next {
+
+	public  String nextd(int day,int month, int year) {
+		
+		if((month>12)||((year<1812)||(year>2020))||(day>31))
+		{
+			return("Enter valid dates");
+		} 
+		else
+		{
+			if((day==31 && month%2!=1 && month<8)||(day==31 && month>7 && month%2==1))
+			{
+				return("Enter valid dates");
+			}
+			else
+			{
+			
+				if((month%2==1)||((month>7)&&(month%2==0)))
+				{
+					if(day==31)
+					{
+						if(month==12){
+							day=1;
+							month=1;
+							year+=1;
+						}
+						else
+						{
+						day=1;
+						month+=1;
+						}
+					}
+					else
+					{
+						day+=1;
+					}
+				}
+				else
+				{
+					if(month==2 && day==28)
+					{
+						if((year%4==0 && year%100!=0)||(year%400==0))
+						{
+							day+=1;
+						}
+						else
+						{
+							month+=1;
+							day=1;
+						}
+					}
+					else if(day==30)
+					{
+						if(month==12){
+							day=1;
+							month=1;
+							year+=1;
+						}
+						else
+						{
+						day=1;
+						month+=1;
+						}
+					}
+					else
+					{
+						day+=1;
+					}
+				}
+			}
+		}
+		return(day+"/"+month+"/"+year);
+
+	}
+
+}
+
+Junit Code
+
+*Normal BVA
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+public class Normalbva {
+	@Test
+	public void test1() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1812),"13/3/1812");
+	}
+	@Test
+	public void test2() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(30,3,1813),"31/3/1813");
+	}
+	
+@Test
+	public void test3() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,1912),"1/1/1913");
+	}
+	
+	@Test
+	public void test4() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,2019),"13/3/2019");
+	}
+	@Test
+	public void test5() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,2020),"13/3/2020");
+	}
+	@Test
+	public void test6() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,1,2020),"16/1/2020");
+	}
+	@Test
+	public void test7() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,2,2020),"16/2/2020");
+	}
+	@Test
+	public void test8() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,11,2020),"16/11/2020");
+	}
+	@Test
+	public void test9() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,12,2020),"16/12/2020");
+	}
+	@Test
+	public void test10() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,6,2020),"16/6/2020");
+	}
+	@Test
+	public void test11() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(1,6,2020),"2/6/2020");
+	}
+	@Test
+	public void test12() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(2,6,2020),"3/6/2020");
+	}
+	@Test
+	public void test13() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(15,6,2020),"16/6/2020");
+	}
+	
+	@Test
+	public void test14() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(30,6,2020),"1/7/2020");
+	}
+	@Test
+	public void test15() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,3,2020),"1/4/2020");
+	}
+
+}
+
+*Robust BVA
+
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+public class robustbva {
+
+	@Test
+	public void test() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(25,3,2019),"26/3/2019");
+	}
+
+	@Test
+	public void test1() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1950),"13/3/1950");
+	}
+	@Test
+	public void test3() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,1915),"1/1/1916");
+	}
+	
+	@Test
+	public void test6() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1915),"13/3/1915");
+	}
+	
+	@Test
+	public void test4() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(32,3,1914),"Enter valid dates");
+	}
+	@Test
+	public void test5() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,13,2021),"Enter valid dates");
+	}
+	
+
+	@Test
+	public void test7() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,2020),"13/3/2020");
+	}
+
+}
+
+*Worst-case BVA
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+public class worstcase {
+
+	@Test
+	public void test() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(25,3,2012),"26/3/2012");
+	}
+
+	@Test
+	public void test1() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1925),"13/3/1925");
+	}
+	@Test
+	public void test2() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(30,3,1950),"31/3/1950");
+	}
+	@Test
+	public void test3() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2011");
+	}
+	public void test4() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2010");
+	}
+	public void test5() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2010");
+	}
+	
+	@Test
+	public void test6() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1915),"13/3/1915");
+	}
+	@Test
+	public void test7() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1920),"13/3/1920");
+	}
+	@Test
+	public void test8() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2009),"1/1/2010");
+	}
+	@Test
+	public void test9() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2000),"1/1/2001");
+	}
+
+
+}
+
+
+
+
+
+
+
+*Robust worst-case BVA
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class robustworstcase {
+
+	@Test
+	public void test() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(25,3,2012),"26/3/2012");
+	}
+
+	@Test
+	public void test1() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1925),"13/3/1925");
+	}
+	@Test
+	public void test2() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(30,3,1950),"31/3/1950");
+	}
+	@Test
+	public void test3() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2011");
+	}
+	public void test4() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2010");
+	}
+	public void test5() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2010),"1/1/2010");
+	}
+	
+	@Test
+	public void test6() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1915),"13/3/1915");
+	}
+	@Test
+	public void test7() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,3,1920),"13/3/1920");
+	}
+	@Test
+	public void test8() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2009),"1/1/2010");
+	}
+	@Test
+	public void test9() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2000),"1/1/2001");
+	}
+	public void test12() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,2019),"1/1/2020");
+	}
+	@Test
+	public void test13() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(31,12,1999),"1/1/2000");
+	}
+	@Test
+	public void test10() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(32,3,1914),"Enter valid dates");
+	}
+	@Test
+	public void test11() 
+	{
+		Next d1 = new Next();
+		assertEquals(d1.nextd(12,13,2021),"Enter valid dates");
+	}
+
+
+}
+
+
+
+
+11.EQUIVALENCE CLASS PARTITIONING (ECP) FOR NEXTDATE FUNCTION
+
+
+*JAVA CODE
+
+package nd2;
+
+//import java.util.Scanner;
+
+public class nextdate
+{
+	public static String next(int d, int m, int y, int cc)
+	{
+		if(d==cc)
+		{
+			d=1;
+			if(m==12)
+			{
+				y++;
+				m=1;
+			}
+			else
+			{
+				m++;
+			}
+		}
+		else
+		{
+			d++;
+		}
+		
+		return(String.valueOf(d)+"/"+String.valueOf(m)+"/"+String.valueOf(y));
+	}
+	public String nextday(int d, int m, int y)
+	{
+		if(d>=1 && d<=31 && m>=1 && m<=12 && y>=1812 && y<=2012)
+		{
+			switch(m)
+			{
+			case 1: 
+			case 3:return(next(d,m,y,31));
+			case 5:return(next(d,m,y,31));
+			case 7:return(next(d,m,y,31));
+			case 8:return(next(d,m,y,31));
+			case 10:return(next(d,m,y,31));
+			case 12: return(next(d,m,y,31));
+			case 4: return(next(d,m,y,30));
+			case 6: return(next(d,m,y,30));
+			case 9: return(next(d,m,y,30));
+			case 11: return(next(d,m,y,30));
+			default: return(next(d,m,y,((y%4==0 && y%100!=0) || y%400==0)?29:28));
+			}
+		}
+		return "Invalid Values";
+	}
+ 
+}
+
+*Junit code
+package nd2;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class equind2pgm {
+
+	//weak and strong normal test case
+	@Test
+	
+	public void test_1() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,6,1912),"16/6/1912");
+	}
+	
+	@Test
+	public void test_2() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(10,6,1912),"11/6/1912");
+	}
+	@Test
+	public void test_3() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(10,6,1900),"11/6/1900");
+	}
+	
+	@Test
+	public void test_4() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(10,5,1912),"11/5/1912");
+	}
+	
+	@Test
+	public void test_5() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(20,10,2010),"21/10/2010");
+	} 
+	
+	//weak robust test cases
+ 
+	@Test
+	public void test3() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(-1,10,1912),"Invalid Values");
+	}
+
+	@Test
+	public void test31() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,7,1912),"13/7/1912");
+	}
+	@Test
+	public void test32() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,8,1912),"13/8/1912");
+	}
+	@Test
+	public void test33() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,4,1912),"13/4/1912");
+	}
+	@Test
+	public void test34() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,9,1912),"13/9/1912");
+	}
+	@Test
+	public void test35() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,1,1912),"13/1/1912");
+	}
+	@Test
+	public void test36() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,2,1912),"13/2/1912");
+	}
+	@Test
+	public void test37() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(12,3,1912),"13/3/1912");
+	}
+	@Test
+	public void test30() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(10,3,1912),"11/3/1912");
+	}
+	@Test
+	public void test4() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,13,1912),"Invalid Values");
+	}
+	@Test
+	public void test5() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(1,6,2200),"Invalid Values");
+	}
+	@Test
+	public void test6() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(32,6,1912),"Invalid Values");
+	}
+	@Test
+	public void test7() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,6,1811),"Invalid Values");
+	}
+	@Test
+	public void test8() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,6,2013),"Invalid Values");
+	}
+	
+	//strong robust test cases
+	@Test
+	public void test9() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(2,1,1912),"3/1/1912");
+	}
+	@Test
+	public void test10() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(-1,3,1900),"Invalid Values");
+	}
+	@Test
+	public void test11() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,0,1811),"Invalid Values");
+	}
+	@Test
+	public void test12() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(33,12,1912),"Invalid Values");
+	}
+	@Test
+	public void test13() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(15,-1,-1),"Invalid Values");
+	}
+	@Test
+	public void test14() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(-1,6,-1),"Invalid Values");
+	}
+	@Test
+	public void test15() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(-1,-1,-1),"Invalid Values");
+	}
+	@Test
+	public void test16() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(31,12,2010),"1/1/2011");
+	}
+	@Test
+	public void test17() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(30,11,2010),"1/12/2010");
+	}
+	
+	//////leap
+	@Test
+	public void test18() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(3,2,2010),"4/2/2010");
+	}
+
+	@Test
+	public void test19() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(28,2,2010),"1/3/2010");
+	}
+	@Test
+	public void test20() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(20,2,2008),"21/2/2008");
+	}
+	@Test
+	public void test21() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(29,2,2000),"1/3/2000");
+	}
+	@Test
+	
+	public void test22() 
+	{
+		nextdate ob1=new nextdate();
+		assertEquals(ob1.nextday(28,2,1900),"1/3/1900");
+	}
+
+}
+
